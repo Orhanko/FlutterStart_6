@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocetak6/screens/auth_screen.dart';
 
 void main() {
   runApp(const App());
@@ -12,12 +13,11 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'FlutterChat',
       theme: ThemeData().copyWith(
-        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 63, 17, 177),
         ),
       ),
-      home: Scaffold(body: Text("Zadnji Flutter Start")),
+      home: AuthScreen(),
     );
   }
 }
