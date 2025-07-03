@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pocetak6/screens/chat_messages.dart';
+import 'package:pocetak6/screens/new_message.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -20,7 +22,7 @@ class ChatScreen extends StatelessWidget {
         ],
         title: Text("Fluttering Chat"),
       ),
-      body: Center(child: Text("User Logged in")),
+      body: Column(children: [Expanded(child: ChatMessages()), NewMessage()]),
     );
   }
 }
