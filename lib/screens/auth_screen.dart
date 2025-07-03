@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final firebase = FirebaseAuth.instance;
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -13,14 +17,38 @@ class AuthScreenState extends State<AuthScreen> {
   var isLogin = true;
   var enteredEmail = "";
   var enteredPassword = "";
+  var enteredUsername = '';
 
-  void submit() {
+  void submit() async {
     final isValid = formKey.currentState!.validate();
 
-    if (isValid) {
-      formKey.currentState!.save();
-      print("Email: $enteredEmail");
-      print("Password: $enteredPassword");
+    if (!isValid) {
+      return;
+    }
+    formKey.currentState!.save();
+    try {
+      if (isLogin) {
+        final userCredentials = await firebase.signInWithEmailAndPassword(
+          email: enteredEmail,
+          password: enteredPassword,
+        );
+        print(userCredentials);
+      } else {
+        final userCredentials = await firebase.createUserWithEmailAndPassword(
+          email: enteredEmail,
+          password: enteredPassword,
+        );
+        print(userCredentials);
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredentials.user!.uid)
+            .set({'email': enteredEmail, 'username': enteredUsername});
+      }
+    } on FirebaseAuthException catch (error) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error.message ?? "Authentication failed.")),
+      );
     }
   }
 
@@ -72,6 +100,26 @@ class AuthScreenState extends State<AuthScreen> {
                               enteredEmail = newValue!;
                             },
                           ),
+                          if (!isLogin)
+                            TextFormField(
+                              autocorrect: false,
+                              enableSuggestions: false,
+                              decoration: InputDecoration(
+                                labelText: 'Username',
+                              ),
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.trim().length < 4) {
+                                  return "Please enter at least 4 characters";
+                                }
+                                return null;
+                              },
+                              onSaved: (newValue) {
+                                enteredUsername = newValue!;
+                              },
+                            ),
+
                           TextFormField(
                             decoration: InputDecoration(labelText: "Password"),
                             obscureText: true,
