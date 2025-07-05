@@ -14,10 +14,10 @@ class ChatMessages extends StatelessWidget {
               .snapshots(),
       builder: (ctx, chatSnapshots) {
         if (!chatSnapshots.hasData || chatSnapshots.data!.docs.isEmpty) {
-          return Center(child: Text('No messages found;'));
+          return Center(child: Text('No messages found.'));
         }
         if (chatSnapshots.hasError) {
-          return Center(child: Text('Something went wrong;'));
+          return Center(child: Text('Something went wrong.'));
         }
         final loadedMessages = chatSnapshots.data!.docs;
 

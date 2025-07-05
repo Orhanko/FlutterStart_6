@@ -52,7 +52,11 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
         title: Text("Welcome to chat, $username"),
       ),
-      body: Column(children: [Expanded(child: ChatMessages()), NewMessage()]),
+      body: SafeArea(
+        child: Column(
+          children: [Expanded(child: ChatMessages()), NewMessage()],
+        ),
+      ),
     );
   }
 }

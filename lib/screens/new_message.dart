@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class NewMessage extends StatefulWidget {
   const NewMessage({super.key});
@@ -48,21 +49,36 @@ class NewMessageState extends State<NewMessage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 2, bottom: 16),
+      padding: EdgeInsets.only(left: 16, right: 2),
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              controller: messageController,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: InputDecoration(labelText: "Aa..."),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              decoration: BoxDecoration(
+                color:
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey[800]
+                        : Colors.grey[200],
+                borderRadius: BorderRadius.circular(26),
+              ),
+              child: TextField(
+                controller: messageController,
+                decoration: const InputDecoration(
+                  hintText: 'Aa...',
+                  border: InputBorder.none,
+                ),
+                textInputAction: TextInputAction.send,
+                onSubmitted: (value) {
+                  // send message logic here
+                },
+              ),
             ),
           ),
           IconButton(
             color: Theme.of(context).colorScheme.primary,
             onPressed: submitMessage,
-            icon: Icon(Icons.send),
+            icon: Icon(CupertinoIcons.paperplane_fill),
           ),
         ],
       ),
